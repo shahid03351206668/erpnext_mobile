@@ -4,8 +4,9 @@ import json
 import time
 import frappe
 import requests
+from datetime import datetime, timedelta
 
-from frappe.utils import cstr
+from frappe.utils import cstr, cint
 
 
 @frappe.whitelist(allow_guest=True)
@@ -87,6 +88,28 @@ def get_access_token():
 
 
 def notification_log_after_insert(self, method=None):
+    settings = frappe.get_doc(
+        "Firebase Notification Settings", "Firebase Notification Settings"
+    )
+
+    send = True
+    start_time = datetime.now() - timedelta(
+        seconds=cint(settings.notification_duration)
+    )
+    end_time = datetime.now()
+    notifications_count = frappe.db.sql(
+        f""" SELECT COUNT(name) FROM `tabNotification Log` WHERE subject = '{self.subject}' AND for_user = '{self.for_user}' AND creation BETWEEN '{start_time}' AND '{end_time}' """
+    ) or [[0]]
+    notifications_count = notifications_count[0][0]
+    if notifications_count > settings.notification_limit:
+        send = False
+
+    if send:
+        send_firebase_notification(self)
+
+
+def send_firebase_notification(self):
+
     TAG_RE = re.compile(r"<[^>]+>")
     subject = TAG_RE.sub("", cstr(self.subject))
     email_content = TAG_RE.sub("", cstr(self.email_content))
@@ -96,10 +119,10 @@ def notification_log_after_insert(self, method=None):
             "Firebase Device Token", filters={"user": self.for_user}, pluck="token"
         )
         device_tokens = set(device_tokens)
-        frappe.log_error("Notification", f"Device Tokens: {device_tokens}")
 
         if not device_tokens:
             return
+
         for i in device_tokens:
             access_token = get_access_token()
             if not access_token:
