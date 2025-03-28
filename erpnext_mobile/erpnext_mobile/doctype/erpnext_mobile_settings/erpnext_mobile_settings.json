@@ -8,11 +8,7 @@
   "notification_settings_section",
   "notification_duration",
   "column_break_qhdy",
-  "notification_limit",
-  "firebase_settings_section",
-  "client_id",
-  "column_break_vjwj",
-  "client_secret"
+  "notification_limit"
  ],
  "fields": [
   {
@@ -28,39 +24,20 @@
    "label": "Notification Limit"
   },
   {
-   "fieldname": "client_id",
-   "fieldtype": "Small Text",
-   "label": "Client ID"
-  },
-  {
    "fieldname": "column_break_qhdy",
    "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "client_secret",
-   "fieldtype": "Small Text",
-   "label": "Client Secret"
   },
   {
    "fieldname": "notification_settings_section",
    "fieldtype": "Section Break",
    "label": "Notification Settings"
-  },
-  {
-   "fieldname": "firebase_settings_section",
-   "fieldtype": "Section Break",
-   "label": "Firebase Settings"
-  },
-  {
-   "fieldname": "column_break_vjwj",
-   "fieldtype": "Column Break"
   }
  ],
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-03-28 12:47:33.654270",
+ "modified": "2025-03-28 13:52:55.522412",
  "modified_by": "Administrator",
  "module": "ERPNext Mobile",
  "name": "ERPNext Mobile Settings",
