@@ -89,7 +89,7 @@ def get_access_token():
 
 def notification_log_after_insert(self, method=None):
     settings = frappe.get_doc(
-        "Firebase Notification Settings", "Firebase Notification Settings"
+        "ERPNext Mobile Settings", "ERPNext Mobile Settings"
     )
 
     send = True

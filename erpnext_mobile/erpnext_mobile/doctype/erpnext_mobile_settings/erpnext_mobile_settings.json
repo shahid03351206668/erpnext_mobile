@@ -5,19 +5,26 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "section_break_7dqz"
+  "notification_duration",
+  "notification_limit"
  ],
  "fields": [
   {
-   "fieldname": "section_break_7dqz",
-   "fieldtype": "Section Break"
+   "fieldname": "notification_duration",
+   "fieldtype": "Duration",
+   "label": "Notification Duration"
+  },
+  {
+   "fieldname": "notification_limit",
+   "fieldtype": "Int",
+   "label": "Notification Limit"
   }
  ],
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-03-04 14:39:58.793395",
+ "modified": "2025-03-28 11:35:44.825798",
  "modified_by": "Administrator",
  "module": "ERPNext Mobile",
  "name": "ERPNext Mobile Settings",
