@@ -6,7 +6,10 @@
  "engine": "InnoDB",
  "field_order": [
   "notification_duration",
-  "notification_limit"
+  "client_id",
+  "column_break_qhdy",
+  "notification_limit",
+  "client_secret"
  ],
  "fields": [
   {
@@ -18,13 +21,27 @@
    "fieldname": "notification_limit",
    "fieldtype": "Int",
    "label": "Notification Limit"
+  },
+  {
+   "fieldname": "client_id",
+   "fieldtype": "Small Text",
+   "label": "Client ID"
+  },
+  {
+   "fieldname": "column_break_qhdy",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "client_secret",
+   "fieldtype": "Small Text",
+   "label": "Client Secret"
   }
  ],
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-03-28 11:35:44.825798",
+ "modified": "2025-03-28 12:30:37.503315",
  "modified_by": "Administrator",
  "module": "ERPNext Mobile",
  "name": "ERPNext Mobile Settings",

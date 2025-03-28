@@ -150,11 +150,11 @@ def send_notifications_users(self, method=None):
     )
 
     fire_base_settings = frappe.get_doc(
-        "Firebase Settings", "Firebase Settings"
+        "ERPNext Mobile Settings", "ERPNext Mobile Settings"
     )
 
     if not fire_base_settings.client_id or not fire_base_settings.client_secret:
-        frappe.log_error("Firebase Settings not set")
+        frappe.log_error("Please set the client id and client secret in ERPNext Mobile Settings")
         return
     
     for device in devices:
