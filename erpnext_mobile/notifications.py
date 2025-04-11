@@ -11,52 +11,52 @@ from frappe.utils import cstr, cint
 
 @frappe.whitelist(allow_guest=True)
 def reset_device_token(user, token, log_out=None):
-    try:
-        doctype = "Firebase Device Token"
-        already_made_docs = frappe.db.get_list(
-            doctype, filters={"user": user, "token": token}, pluck="name"
-        )
+    doctype = "Firebase Device Token"
+    already_made_docs = frappe.db.sql(
+        f""" select name from `tabFirebase Device Token` where user='{user}' and token='{token}' """,
+        as_dict=True,
+    )
+    already_made_docs = [i["name"] for i in already_made_docs]
+    # already_made_docs = frappe.db.get_list(
+    #     doctype, filters={"user": user, "token": token}, pluck="name"
+    # )
 
-        if log_out:
-            for already_made in already_made_docs:
-                doc = frappe.get_doc(doctype, already_made)
-                doc.flags.ignore_permissions = True
-                doc.delete()
-
-            frappe.db.commit()
-            frappe.response["message"] = "Token Deleted."
-            return
-
-        elif not already_made_docs:
-
-            previous_tokens = frappe.db.get_list(
-                doctype, filters={"token": token}, pluck="name"
-            )
-
-            for i in previous_tokens:
-                frappe.delete_doc(doctype, i)
-                frappe.db.commit()
-
-            doc = frappe.new_doc(doctype)
-            doc.user = user
-            doc.token = token
+    if log_out:
+        for already_made in already_made_docs:
+            doc = frappe.get_doc(doctype, already_made)
             doc.flags.ignore_permissions = True
-            doc.save()
+            doc.delete()
 
-            frappe.db.commit()
-            frappe.response["message"] = "Token Created."
-        else:
-            frappe.response["message"] = "Token Already Found."
+        frappe.db.commit()
+        frappe.response["message"] = "Token Deleted."
+        return
 
-    except Exception as e:
-        frappe.log_error(
-            "Token update Failed",
-            str(e),
+    elif not already_made_docs:
+        previous_tokens = frappe.db.sql(
+            f""" select name from `tabFirebase Device Token` where  token='{token}' """,
+            as_dict=True,
         )
-        frappe.response["message"] = e
+        previous_tokens = [i["name"] for i in previous_tokens]
+
+        for i in previous_tokens:
+            doc = frappe.get_doc(doctype, i)
+            doc.flags.ignore_permissions = True
+            doc.delete()
+
+        doc = frappe.new_doc(doctype)
+        doc.user = user
+        doc.token = token
+        doc.flags.ignore_permissions = True
+        doc.save()
+
+        frappe.db.commit()
+        frappe.response["message"] = "Token Created."
+    else:
+        frappe.response["message"] = "Token Already Found."
 
 
 def get_access_token():
+
     now = int(time.time())
 
     payload = {
@@ -88,9 +88,7 @@ def get_access_token():
 
 
 def notification_log_after_insert(self, method=None):
-    settings = frappe.get_doc(
-        "ERPNext Mobile Settings", "ERPNext Mobile Settings"
-    )
+    settings = frappe.get_doc("ERPNext Mobile Settings", "ERPNext Mobile Settings")
 
     send = True
     start_time = datetime.now() - timedelta(
