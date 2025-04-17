@@ -13,7 +13,7 @@ from frappe.utils import cstr, cint
 def reset_device_token(user, token, log_out=None):
     doctype = "Firebase Device Token"
     already_made_docs = frappe.db.sql(
-        f""" select name from `tabFirebase Device Token` where user='{user}' and token='{token}' """,
+        f""" select name from `tabFirebase Device Token` where user={frappe.db.escape(user)} and token={frappe.db.escape(token)} """,
         as_dict=True,
     )
     already_made_docs = [i["name"] for i in already_made_docs]
@@ -33,7 +33,7 @@ def reset_device_token(user, token, log_out=None):
 
     elif not already_made_docs:
         previous_tokens = frappe.db.sql(
-            f""" select name from `tabFirebase Device Token` where  token='{token}' """,
+            f""" select name from `tabFirebase Device Token` where  token={frappe.db.escape(token)} """,
             as_dict=True,
         )
         previous_tokens = [i["name"] for i in previous_tokens]
@@ -96,7 +96,7 @@ def notification_log_after_insert(self, method=None):
     )
     end_time = datetime.now()
     notifications_count = frappe.db.sql(
-        f""" SELECT COUNT(name) FROM `tabNotification Log` WHERE subject = '{self.subject}' AND for_user = '{self.for_user}' AND creation BETWEEN '{start_time}' AND '{end_time}' """
+        f""" SELECT COUNT(name) FROM `tabNotification Log` WHERE subject = {frappe.db.escape(self.subject)} AND for_user = {frappe.db.escape(self.for_user)} AND creation BETWEEN '{start_time}' AND '{end_time}' """
     ) or [[0]]
     notifications_count = notifications_count[0][0]
     if notifications_count > settings.notification_limit:
