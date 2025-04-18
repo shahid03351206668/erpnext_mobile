@@ -83,7 +83,7 @@ def get_access_token():
     )
 
     if response.ok:
-        frappe.log_error("Access Token Generated", response.json())
+        # frappe.log_error("Access Token Generated", response.json())
         return response.json().get("access_token")
 
 
