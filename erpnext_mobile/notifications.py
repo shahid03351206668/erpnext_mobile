@@ -137,6 +137,18 @@ def send_firebase_notification(self):
                                 "title": subject,
                                 "body": email_content,
                             },
+                            "data": {
+                                "click_action": "FLUTTER_NOTIFICATION_CLICK",
+                                "screen": "/direct_screen",
+                                "url": "%s/app/%s/%s"
+                                % (
+                                    frappe.utils.get_url(),
+                                    str(self.get("document_type"))
+                                    .lower()
+                                    .replace(" ", "-"),
+                                    self.get("document_name"),
+                                ),
+                            },
                             "apns": {
                                 "payload": {"aps": {"sound": "default", "badge": 1}}
                             },
